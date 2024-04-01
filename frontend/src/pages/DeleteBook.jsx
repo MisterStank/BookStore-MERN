@@ -3,6 +3,7 @@ import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const DeleteBook = () => {
   const [loading, setLoading] = useState(false);
@@ -14,11 +15,12 @@ const DeleteBook = () => {
       .delete(`http://localhost:5555/books/${id}`)
       .then(()=> {
         setLoading(false);
+        toast.success('A book has been deleted!');
         navigate('/');
       })
       .catch((error) => {
         setLoading(false);
-        alert('An error happened. Please Check console');
+        toast.error('An error happened. Please Check console');
         console.log(error);
       });
   };

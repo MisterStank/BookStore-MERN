@@ -3,6 +3,7 @@ import BackButton from '../components/BackButton';
 import Spinner from '../components/Spinner';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const EditBook = () => {
   const [title, setTitle] = useState('');
@@ -38,11 +39,12 @@ const EditBook = () => {
       .put(`http://localhost:5555/books/${id}`, data)
       .then(()=> {
         setLoading(false);
+        toast.success('A book has been updated!');
         navigate('/');
       })
       .catch((error) => {
         setLoading(false);
-        alert('An error happened. Please Check console');
+        toast.error('An error happened. Please Check console');
         console.log(error);
       });
   };
