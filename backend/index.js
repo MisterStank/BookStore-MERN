@@ -1,33 +1,85 @@
-import express, { request, response } from "express";
-import { PORT, mongoDBURL } from "./config.js";
+import express from "express";
 import mongoose from "mongoose";
-import { Book } from "./models/bookModel.js";
-import booksRoute from "./routes/booksRoute.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"; // Import JWT
+import { PORT, mongoDBURL, JWT_SECRET } from "./config.js";
+import User from "./models/userModel.js"; // Assuming you have a UserModel
 import cors from "cors";
 
 const app = express();
 
-
-//Middleware for parsing request body
+// Middleware for parsing request body
 app.use(express.json());
-
 app.use(cors());
 
-app.get('/', (request, response) => {
-    console.log(request)
-    return response.status(234).send('Welcome')
+// Registration route
+app.post('/register', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        // Check if user already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        // Create a new user
+        const newUser = new User({ username, password: hashedPassword });
+        await newUser.save();
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
 });
 
-app.use('/books', booksRoute);
+// Login route
+app.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        // Find user by username
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // Compare passwords
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: "Invalid username or password" });
+        }
+        // Create JWT token
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '24h' });
+        res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
 
-mongoose
-.connect(mongoDBURL)
-.then(()=> {
-    console.log('App connected to database');
-    app.listen(PORT,() => {
-        console.log(`App is listening to port: ${PORT}`);
+// Protected route example
+app.get('/protected', authenticateToken, (req, res) => {
+    res.json(req.user);
+});
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.sendStatus(401);
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+        next();
     });
-})
-.catch((error) => {
-    console.log(error);
-});
+}
+
+mongoose.connect(mongoDBURL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('App connected to database');
+        app.listen(PORT, () => {
+            console.log(`App is listening to port: ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
