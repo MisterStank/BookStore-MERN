@@ -2,13 +2,15 @@ import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; // Import JWT
-import { PORT, mongoDBURL, JWT_SECRET } from "./config.js";
+//import { PORT, mongoDBURL, JWT_SECRET } from "./config.js";
 import User from "./models/userModel.js"; // Assuming you have a UserModel
 import cors from "cors";
+import 'dotenv/config'
 
 const app = express();
 
-const secret = JWT_SECRET;
+
+const secret = process.env.JWT_SECRET;
 
 // Middleware for parsing request body
 app.use(express.json());
@@ -102,11 +104,11 @@ app.get("/api/users", authenticateToken, async (req, res) => {
   
 
 mongoose
-  .connect(mongoDBURL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.mongoDBURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("App connected to database");
     app.listen(PORT, () => {
-      console.log(`App is listening to port: ${PORT}`);
+      console.log(`App is listening to port: ${process.env.JWT_SECRET}`);
     });
   })
   .catch((error) => {
