@@ -9,7 +9,6 @@ import 'dotenv/config'
 
 const app = express();
 
-
 const secret = process.env.JWT_SECRET;
 
 // Middleware for parsing request body
@@ -56,7 +55,7 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid username or password" });
     }
     // Create JWT token
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
     res.status(200).json({ message: "Login successful", token });
@@ -107,8 +106,8 @@ mongoose
   .connect(process.env.mongoDBURL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("App connected to database");
-    app.listen(PORT, () => {
-      console.log(`App is listening to port: ${process.env.JWT_SECRET}`);
+    app.listen(process.env.PORT, () => {
+      console.log(`App is listening to port: ${process.env.PORT}`);
     });
   })
   .catch((error) => {
