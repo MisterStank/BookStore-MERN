@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+//import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; // Import JWT
 import User from "./models/userModel.js"; // Assuming you have a UserModel
 import cors from "cors";
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cors());
 
 // Registration route
-app.post("/register", async (req, res) => {
+/*app.post("/register", async (req, res) => {
   try {
     const { username, password } = req.body;
     // Check if user already exists
@@ -94,7 +94,7 @@ app.get("/api/users", authenticateToken, async (req, res) => {
       console.error("Error fetching users:", err);
       res.status(500).json({ message: "Server error" });
     }
-  });
+  });*/
   
 
 mongoose
