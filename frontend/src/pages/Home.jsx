@@ -17,7 +17,7 @@ const Home = () => {
       prevShowType === "table" ? "card" : "table"
     );
   };
-
+  axios.defaults.withCredentials=true;
   useEffect(() => {
     setLoading(true);
     axios

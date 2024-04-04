@@ -2,7 +2,6 @@ import express from "express";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"; // Import JWT
-//import { PORT, mongoDBURL, JWT_SECRET } from "./config.js";
 import User from "./models/userModel.js"; // Assuming you have a UserModel
 import cors from "cors";
 import 'dotenv/config'
