@@ -36,7 +36,7 @@ const EditBook = () => {
     };
     setLoading(true);
     axios
-      .put(`http://localhost:5555/books/${id}`, data)
+      .put(`https://book-store-mern-api-eight.vercel.app/${id}`, data)
       .then(()=> {
         setLoading(false);
         toast.success('A book has been updated!');
