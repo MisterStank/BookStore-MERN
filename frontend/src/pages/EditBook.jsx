@@ -12,6 +12,7 @@ const EditBook = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const {id} = useParams();
+  axios.defaults.withCredentials=true;
   useEffect(() => {
     setLoading(true);
     axios
