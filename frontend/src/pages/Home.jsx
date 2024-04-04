@@ -17,11 +17,10 @@ const Home = () => {
       prevShowType === "table" ? "card" : "table"
     );
   };
-  axios.defaults.withCredentials=true;
   useEffect(() => {
     setLoading(true);
     axios
-      .get("https://book-store-mern-api-eight.vercel.app/books")
+      .get("http://localhost:5555/books")
       .then((response) => {
         setBooks(response.data.data);
         setLoading(false);

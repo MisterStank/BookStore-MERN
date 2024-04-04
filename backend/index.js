@@ -4,16 +4,26 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken"; // Import JWT
 import User from "./models/userModel.js"; // Assuming you have a UserModel
 import cors from "cors";
+import booksRoute from "./routes/booksRoute.js";
 import 'dotenv/config'
 
 const app = express();
 
 const secret = process.env.JWT_SECRET;
+const url = process.env.mongoDBURL;
 
 // Middleware for parsing request body
 app.use(express.json());
 app.use(cors());
 
+app.use(cors());
+
+app.get('/', (request, response) => {
+    console.log(request)
+    return response.status(234).send('Welcome')
+});
+
+app.use('/books', booksRoute);
 // Registration route
 /*app.post("/register", async (req, res) => {
   try {
@@ -96,9 +106,9 @@ app.get("/api/users", authenticateToken, async (req, res) => {
     }
   });*/
   
-
+console.log(url)
 mongoose
-  .connect(process.env.mongoDBURL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("App connected to database");
     app.listen(process.env.PORT, () => {
