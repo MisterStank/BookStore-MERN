@@ -20,7 +20,7 @@ const CreateBooks = () => {
     };
     setLoading(true);
     axios
-      .post('https://book-store-mern-api-eight.vercel.app/books', data)
+      .post('https://bookstore-mern-slfb.onrender.com/books', data)
       .then(()=> {
         setLoading(false);
         toast.success('A book has been created!');

@@ -13,7 +13,7 @@ const DeleteBook = () => {
   const handleDeleteBook = () => {
     setLoading(true);
     axios
-      .delete(`https://book-store-mern-api-eight.vercel.app/books/${id}`)
+      .delete(`https://bookstore-mern-slfb.onrender.com/books/${id}`)
       .then(()=> {
         setLoading(false);
         toast.success('A book has been deleted!');

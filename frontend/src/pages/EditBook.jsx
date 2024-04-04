@@ -16,7 +16,7 @@ const EditBook = () => {
   useEffect(() => {
     setLoading(true);
     axios
-      .get(`http://localhost:5555/books/${id}`)
+      .get(`https://bookstore-mern-slfb.onrender.com/books/${id}`)
       .then((response)=> {
         setAuthor(response.data.author)
         setTitle(response.data.title)
