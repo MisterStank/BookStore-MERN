@@ -11,7 +11,6 @@ const CreateBooks = () => {
   const [publishYear, setPublishYear] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  axios.defaults.withCredentials=true;
   const handleSaveBook = () => {
     const data = {
       title,

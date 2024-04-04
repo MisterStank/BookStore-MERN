@@ -9,7 +9,6 @@ const DeleteBook = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const {id} = useParams();
-  axios.defaults.withCredentials=true;
   const handleDeleteBook = () => {
     setLoading(true);
     axios
