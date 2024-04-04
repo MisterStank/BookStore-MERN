@@ -12,11 +12,11 @@ const secret = process.env.JWT_SECRET;
 
 // Middleware for parsing request body
 app.use(express.json());
-app.use(cors({
+/*app.use(cors({
   origin: ["https://m-book-store.vercel.app"],
   methods: ["POST", "GET", "PUT", "DELETE"],
   credentials: true,
-}));
+}));*/
 
 // Registration route
 app.post("/register", async (req, res) => {
