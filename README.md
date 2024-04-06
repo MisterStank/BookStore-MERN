@@ -1,1 +1,1 @@
-<h1>BookStore website using MERN stack</h1>
+<h2>BookStore website using MERN stack</h2>
