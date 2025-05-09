@@ -1,17 +1,18 @@
 import { Link } from 'react-router-dom';
+import { Button } from 'antd';
 import { BsArrowLeft } from 'react-icons/bs';
 
-const BackButton = ({ destination = '/'}) => {
+const BackButton = ({ destination = '/' }) => {
   return (
-    <div className='flex'>
-        <Link
-            to={destination}
-            className='bg-sky-800 text-white px-4 py-1 rounded-lg w-fit'
-        >
-            <BsArrowLeft className='text-2xl'/>
-        </Link>
-    </div>
-  )
-}
+    <Button
+      type="primary"
+      style={{ backgroundColor: '#38bdf8' }}
+    >
+      <Link to={destination} style={{ color: 'white' , flexDirection: 'row', display: 'flex', alignItems: 'center'}}>
+       <BsArrowLeft /> Back
+      </Link>
+    </Button>
+  );
+};
 
-export default BackButton
+export default BackButton;

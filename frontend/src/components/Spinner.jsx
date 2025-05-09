@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { Spin } from 'antd';
 
 const Spinner = () => {
   return (
-    <div className='animate-ping w-16 h-16 m-8 rounded-full bg-sky-600'></div>
-  )
-}
+    <div style={{ textAlign: 'center', padding: '2rem' }}>
+      <Spin size="large" tip="Loading..." />
+    </div>
+  );
+};
 
-export default Spinner
+export default Spinner;

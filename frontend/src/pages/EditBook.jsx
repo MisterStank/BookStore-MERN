@@ -1,93 +1,106 @@
-import React, {useState, useEffect} from 'react';
-import BackButton from '../components/BackButton';
-import Spinner from '../components/Spinner';
+import React, { useState, useEffect } from 'react';
+import { Form, Input, InputNumber, Button, Card, Typography } from 'antd';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import BackButton from '../components/BackButton';
+import Spinner from '../components/Spinner';
+
+const { Title } = Typography;
 
 const EditBook = () => {
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [publishYear, setPublishYear] = useState('');
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {id} = useParams();
+  const { id } = useParams();
+
   useEffect(() => {
     setLoading(true);
     axios
       .get(`https://bookstore-mern-slfb.onrender.com/books/${id}`)
-      .then((response)=> {
-        setAuthor(response.data.author)
-        setTitle(response.data.title)
-        setPublishYear(response.data.publishYear)
+      .then((response) => {
+        form.setFieldsValue({
+          title: response.data.title,
+          author: response.data.author,
+          publishYear: response.data.publishYear,
+        });
         setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
-        alert('An error happened. Please Check console');
+        toast.error('An error happened. Please check the console.');
         console.log(error);
       });
-  }, [])
-  const handleEditBook = () => {
-    const data = {
-      title,
-      author,
-      publishYear,
-    };
+  }, [id, form]);
+
+  const handleEditBook = (values) => {
     setLoading(true);
     axios
-      .put(`https://bookstore-mern-slfb.onrender.com/books/${id}`, data)
-      .then(()=> {
+      .put(`https://bookstore-mern-slfb.onrender.com/books/${id}`, values)
+      .then(() => {
         setLoading(false);
-        toast.success('A book has been updated!');
+        toast.success('Book updated successfully!');
         navigate('/');
       })
       .catch((error) => {
         setLoading(false);
-        toast.error('An error happened. Please Check console');
+        toast.error('An error happened. Please check the console.');
         console.log(error);
       });
   };
 
   return (
-    <div className='p-4'>
-      <BackButton/>
-      <h1 className='text-3xl my-4'>Edit Book</h1>
-      {loading ? <Spinner/> : ''}
-      <div className='flex flex-col border-2 border-sky-400 rounded-xl w-[600px] p-4 mx-auto'>
-        <div className='my-4'>
-          <label className='text-xl mr-4 text-gray-500'>Title</label>
-          <input
-            type='text'
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className='border-2 border-gray-500 px-4 py-2 w-full'
-          />
-        </div>
-        <div className='my-4'>
-          <label className='text-xl mr-4 text-gray-500'>Author</label>
-          <input
-            type='text'
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            className='border-2 border-gray-500 px-4 py-2 w-full'
-          />
-        </div>
-        <div className='my-4'>
-          <label className='text-xl mr-4 text-gray-500'>Publish Year</label>
-          <input
-            type='number'
-            value={publishYear}
-            onChange={(e) => setPublishYear(e.target.value)}
-            className='border-2 border-gray-500 px-4 py-2 w-full'
-          />
-        </div>
-        <button className='p-2 bg-sky-300 m-8' onClick={handleEditBook}>
-          Save
-        </button>
-      </div>
-    </div>
-  )
-}
+    <div style={{ padding: 16 }}>
+      <BackButton />
+      <Title level={3} style={{ marginTop: 16 }}>Edit Book</Title>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Card style={{ maxWidth: 600, margin: '0 auto' }}>
+          <Form
+            form={form}
+            layout="vertical"
+            onFinish={handleEditBook}
+          >
+            <Form.Item
+              label={<span style={{ fontSize: '1.25rem', color: '#6b7280' }}>Title</span>}
+              name="title"
+              rules={[{ required: true, message: 'Please enter the title' }]}
+            >
+              <Input size="large" />
+            </Form.Item>
 
-export default EditBook
+            <Form.Item
+              label={<span style={{ fontSize: '1.25rem', color: '#6b7280' }}>Author</span>}
+              name="author"
+              rules={[{ required: true, message: 'Please enter the author' }]}
+            >
+              <Input size="large" />
+            </Form.Item>
+
+            <Form.Item
+              label={<span style={{ fontSize: '1.25rem', color: '#6b7280' }}>Publish Year</span>}
+              name="publishYear"
+              rules={[{ required: true, message: 'Please enter the year' }]}
+            >
+              <InputNumber size="large" style={{ width: '100%' }} />
+            </Form.Item>
+
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ backgroundColor: '#38bdf8' }} // Tailwind sky-300
+                size="large"
+              >
+                Save
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      )}
+    </div>
+  );
+};
+
+export default EditBook;

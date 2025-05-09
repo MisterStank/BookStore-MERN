@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Spinner from "../components/Spinner";
+import { Button, Switch, Typography, Spin } from "antd";
 import { Link } from "react-router-dom";
-import { AiOutlineEdit } from "react-icons/ai";
-import { BsInfoCircle } from "react-icons/bs";
-import { MdOutlineAddBox, MdOutlineDelete } from "react-icons/md";
+import { MdOutlineAddBox } from "react-icons/md";
 import BookTable from "../components/home/BookTable";
 import BookCard from "../components/home/BookCard";
+
+const { Title } = Typography;
 
 const Home = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showType, setShowType] = useState("card");
+
   const handleToggle = () => {
-    setShowType((prevShowType) =>
-      prevShowType === "table" ? "card" : "table"
-    );
+    setShowType((prevShowType) => (prevShowType === "table" ? "card" : "table"));
   };
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -33,40 +33,28 @@ const Home = () => {
 
   return (
     <div className="p-4">
-      <label className="font-thin mx-3">change view</label>
-      <div className="relative w-28 h-10 bg-gray-200 rounded-full p-1 flex justify-center items-center gap-x-4 shadow-md">
-        <button
-          className={`absolute top-0 left-0 w-1/2 h-full font-semibold text-white bg-sky-300 rounded-full transition-transform ${
-            showType === "table"
-              ? "transform translate-x-0"
-              : "transform translate-x-full"
-          }`}
-          onClick={handleToggle}
-        >
-          {showType === "table" ? "Table" : "Card"}
-          
-        </button>
-        {showType === 'table' && <span className="ml-14">Card</span>}
-        {showType === 'card' && <span className="mr-14">Table</span>}
-        <button
-          className={`absolute top-0 right-0 w-1/2 h-full font-semibold text-white bg-sky-300 rounded-full transition-transform ${
-            showType === "card"
-              ? "transform translate-x-0"
-              : "transform -translate-x-full"
-          }`}
-          onClick={handleToggle}
-        >
-          {showType === "card" ? "Card" : "Table"}
-        </button>
-      </div>
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl my-8">Books List</h1>
+        <Title level={2}>Books List</Title>
         <Link to="/books/create">
-          <MdOutlineAddBox className="text-sky-800 text-4xl" />
+          <Button type="primary" icon={<MdOutlineAddBox fontSize={28}/>} shape="default" size="large" style={{ backgroundColor: '#38bdf8' }}/>
         </Link>
       </div>
+
+      <div className="my-4">
+        <span className="font-thin mx-3">Change view</span>
+        <Switch
+          checked={showType === "table"}
+          onChange={handleToggle}
+          checkedChildren="Table"
+          unCheckedChildren="Card"
+          style={{ backgroundColor: '#38bdf8' }}
+        />
+      </div>
+
       {loading ? (
-        <Spinner />
+        <div className="flex justify-center items-center">
+          <Spin size="large" />
+        </div>
       ) : showType === "table" ? (
         <BookTable books={books} />
       ) : (
